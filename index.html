@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UserFlow — Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f0f2f8;
+      --card: #fff;
+      --ink: #1e2239;
+      --muted: #9ba3c8;
+      --soft: #4b5280;
+      --violet: #7c5cfc;
+      --pink: #f43f8e;
+      --cyan: #06b6d4;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --border: #e4e7f5;
+      --radius: 18px;
+      --radius-sm: 10px;
+      --sidebar-w: 240px;
+      --shadow: 0 6px 24px rgba(30,34,57,0.10);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: "Nunito Sans", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      display: flex;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w);
+      position: fixed;
+      top:0; bottom:0; left:0;
+      background: #fff;
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+    }
+
+    .logo {
+      display:flex;
+      gap:10px;
+      padding-bottom:20px;
+      border-bottom:1px solid var(--border);
+      margin-bottom:20px;
+    }
+
+    .logo-icon {
+      width:38px; height:38px;
+      border-radius:10px;
+      background: linear-gradient(135deg,var(--violet),var(--pink));
+      display:flex; align-items:center; justify-content:center;
+      color:#fff;
+      font-weight:800;
+    }
+
+    .nav-item {
+      display:flex;
+      gap:10px;
+      padding:10px;
+      border-radius:10px;
+      text-decoration:none;
+      color: var(--soft);
+      font-weight:600;
+      margin-bottom:4px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background:#ede9ff;
+      color: var(--violet);
+    }
+
+    /* MAIN */
+    .main {
+      margin-left: var(--sidebar-w);
+      padding: 32px;
+      flex:1;
+    }
+
+    /* TOP */
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+    }
+
+    .title {
+      font-size:1.6rem;
+      font-weight:800;
+    }
+
+    .btn {
+      background: linear-gradient(135deg,var(--violet),#9b7aff);
+      color:#fff;
+      padding:10px 18px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    /* STATS */
+    .stats {
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .card {
+      background:var(--card);
+      padding:18px;
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .value {
+      font-size:1.8rem;
+      font-weight:800;
+    }
+
+    /* GRID */
+    .grid {
+      display:grid;
+      grid-template-columns:1fr 1.6fr;
+      gap:20px;
+      margin-bottom:20px;
+    }
+
+    /* FORM */
+    input {
+      width:100%;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      margin-bottom:10px;
+      outline:none;
+    }
+
+    input:focus {
+      border-color: var(--violet);
+    }
+
+    .submit {
+      width:100%;
+      padding:10px;
+      background: var(--violet);
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    /* TABLE */
+    table {
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th, td {
+      padding:12px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+    }
+
+    tbody tr {
+      opacity:0;
+      animation: rowIn 0.3s ease forwards;
+      animation-delay: calc(var(--i) * 0.04s);
+    }
+
+    @keyframes rowIn {
+      from { transform:translateY(6px); opacity:0; }
+      to { transform:translateY(0); opacity:1; }
+    }
+
+    .actions a {
+      padding:6px 10px;
+      border-radius:8px;
+      font-size:0.75rem;
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .edit { background:#fef3c7; color:#92400e; }
+    .delete { background:#fee2e2; color:#ef4444; }
+
+  </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div style="font-weight:800;">UserFlow</div>
+      <div style="font-size:0.7rem;color:var(--muted);">Secure App</div>
+    </div>
+  </div>
+
+  <a class="nav-item active" href="/">Dashboard</a>
+  <a class="nav-item" href="/register">Register</a>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOP -->
+  <div class="topbar">
+    <div class="title">Dashboard</div>
+    <a class="btn" href="/register">+ Add User</a>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="card"><div class="value">{{ allData|length }}</div><div>Total</div></div>
+    <div class="card"><div class="value">{{ allData|length }}</div><div>Active</div></div>
+    <div class="card"><div class="value">3</div><div>Security</div></div>
+    <div class="card"><div class="value">OK</div><div>Status</div></div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- FORM -->
+    <div class="card">
+      <h3>Quick Add</h3>
+
+      {% if error %}
+        <p style="color:red;">{{ error }}</p>
+      {% endif %}
+
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input name="fname" placeholder="First Name" required>
+        <input name="lname" placeholder="Last Name" required>
+        <input name="email" placeholder="Email" required>
+        <button class="submit">Add</button>
+      </form>
+    </div>
+
+    <!-- INFO -->
+    <div class="card">
+      <h3>Security</h3>
+      <p>✔ Input Validation</p>
+      <p>✔ CSRF Protection</p>
+      <p>✔ XSS Sanitization</p>
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+  <div class="card">
+    <h3>Records</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Name</th><th>Last</th><th>Email</th><th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for data in allData %}
+        <tr style="--i: {{ loop.index }}">
+          <td>{{ data.sno }}</td>
+          <td>{{ data.fname }}</td>
+          <td>{{ data.lname }}</td>
+          <td>{{ data.email }}</td>
+          <td class="actions">
+            <a class="edit" href="/update/{{ data.sno }}">Edit</a>
+            <a class="delete" href="/delete/{{ data.sno }}">Del</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+</main>
+
+</body>
+</html>

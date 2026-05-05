@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UserFlow — Update Record</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #faf8f5;
+      --white: #ffffff;
+      --ink: #1a1a2e;
+      --ink-soft: #4a4a6a;
+      --ink-muted: #9898b8;
+      --accent: #5b6af0;
+      --accent-light: #eef0ff;
+      --accent-glow: rgba(91,106,240,0.18);
+      --amber: #f59e0b;
+      --amber-light: #fef3c7;
+      --border: #e8e6f0;
+      --shadow-sm: 0 2px 8px rgba(26,26,46,0.06);
+      --shadow-lg: 0 20px 60px rgba(26,26,46,0.14);
+      --radius: 20px;
+      --radius-sm: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); opacity: 0.4;
+      animation: float 8s ease-in-out infinite;
+    }
+    .blob-a { width: 400px; height: 400px; background: #fde68a; top: -100px; right: -100px; }
+    .blob-b { width: 350px; height: 350px; background: #c7d2fe; bottom: -80px; left: -60px; animation-delay: 4s; }
+
+    @keyframes float {
+      0%,100% { transform: translate(0,0); }
+      50% { transform: translate(20px, -20px); }
+    }
+
+    .update-wrap {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: min(860px, 95vw);
+      min-height: 520px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .panel-left {
+      background: linear-gradient(145deg, #f59e0b, #fbbf24);
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-left::before {
+      content: '';
+      position: absolute;
+      width: 280px; height: 280px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      bottom: -70px; right: -70px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon {
+      width: 42px; height: 42px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .brand-name { font-size: 1.2rem; font-weight: 700; color: white; }
+
+    .panel-copy { position: relative; z-index: 1; }
+    .panel-heading { font-size: 1.9rem; font-weight: 700; color: white; margin-bottom: 12px; letter-spacing: -0.4px; line-height: 1.25; }
+    .panel-text { font-size: 0.88rem; color: rgba(255,255,255,0.8); line-height: 1.6; }
+
+    .record-info {
+      background: rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-top: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .record-info-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
+    .record-id { font-family: 'DM Mono', monospace; font-size: 1.4rem; font-weight: 500; color: white; }
+
+    .panel-right {
+      background: var(--white);
+      padding: 52px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      text-decoration: none;
+      margin-bottom: 32px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color: var(--accent); }
+
+    .form-heading { font-size: 1.6rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.4px; }
+    .form-sub { font-size: 0.85rem; color: var(--ink-muted); margin-bottom: 28px; }
+
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-icon {
+      position: absolute;
+      left: 14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px 14px 12px 40px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--ink);
+      background: var(--cream);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .field input:focus {
+      border-color: var(--amber);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+    }
+
+    .field input::placeholder { color: var(--ink-muted); }
+
+    .btn-update {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--amber), #fbbf24);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(245,158,11,0.3);
+      margin-top: 8px;
+    }
+
+    .btn-update:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(245,158,11,0.4);
+    }
+
+    .btn-cancel {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .btn-cancel:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <div class="bg">
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+  </div>
+
+  <div class="update-wrap">
+
+    <!-- Left panel -->
+    <div class="panel-left">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <span class="brand-name">UserFlow</span>
+      </div>
+
+      <div class="panel-copy">
+        <div class="panel-heading">Update Record</div>
+        <div class="panel-text">Modify the user's information below. Changes are saved instantly to the database.</div>
+        <div class="record-info">
+          <div class="record-info-label">Editing Record</div>
+          <div class="record-id">ID #{{ data.sno }}</div>
+        </div>
+      </div>
+
+      <div style="font-size:0.72rem; color:rgba(255,255,255,0.45);">CY256L · Secure Software Design · Air University</div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="panel-right">
+      <a href="/" class="back-link">← Back to Dashboard</a>
+
+      <div class="form-heading">Edit User Info</div>
+      <div class="form-sub">Update the details for <strong>{{ data.fname }} {{ data.lname }}</strong>.</div>
+
+      <form action="/update/{{ data.sno }}" method="POST">
+        <div class="field">
+          <label>First Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" name="fname" value="{{ data.fname }}" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Last Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" name="lname" value="{{ data.lname }}" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉</span>
+            <input type="email" name="email" value="{{ data.email }}" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-update">✓ Save Changes</button>
+        <a href="/" class="btn-cancel">Cancel and go back</a>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

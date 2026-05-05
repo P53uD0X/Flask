@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UserFlow — Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0f2f8;
+      --white: #ffffff;
+      --ink: #1e2239;
+      --ink-soft: #4b5280;
+      --ink-muted: #9ba3c8;
+      --violet: #7c5cfc;
+      --violet-light: #ede9ff;
+      --violet-glow: rgba(124,92,252,0.2);
+      --pink: #f43f8e;
+      --green: #10b981;
+      --green-light: #d1fae5;
+      --red: #ef4444;
+      --red-light: #fee2e2;
+      --border: #e4e7f5;
+      --shadow-lg: 0 20px 60px rgba(30,34,57,0.15);
+      --radius: 22px;
+      --radius-sm: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+
+    .register-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      width: min(900px, 100%);
+      min-height: 580px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Left Panel */
+    .panel-left {
+      background: linear-gradient(145deg, #1e2239, #2d3461);
+      padding: 52px 44px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      position: relative; overflow: hidden;
+    }
+
+    .panel-left::before {
+      content:''; position:absolute;
+      width:300px; height:300px; border-radius:50%;
+      background: rgba(124,92,252,0.15);
+      bottom:-80px; right:-60px;
+    }
+    .panel-left::after {
+      content:''; position:absolute;
+      width:180px; height:180px; border-radius:50%;
+      background: rgba(244,63,142,0.1);
+      top:-40px; right:80px;
+    }
+
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand-icon {
+      width:42px; height:42px;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem;
+      box-shadow: 0 4px 16px rgba(124,92,252,0.4);
+    }
+    .brand-name { font-family:'Nunito',sans-serif; font-size:1.15rem; font-weight:800; color:white; }
+
+    .panel-copy { position:relative; z-index:1; }
+    .panel-heading { font-family:'Nunito',sans-serif; font-size:1.9rem; font-weight:800; color:white; margin-bottom:12px; letter-spacing:-0.4px; line-height:1.25; }
+    .panel-text { font-size:0.87rem; color:rgba(255,255,255,0.65); line-height:1.65; margin-bottom:24px; }
+
+    .features { display:flex; flex-direction:column; gap:10px; }
+    .feature { display:flex; align-items:center; gap:10px; font-size:0.84rem; color:rgba(255,255,255,0.8); }
+    .feature-dot {
+      width:22px; height:22px; border-radius:50%;
+      background: rgba(124,92,252,0.3); border:1px solid rgba(124,92,252,0.5);
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.65rem; color:#c4b5fd; flex-shrink:0;
+    }
+
+    .panel-footer { font-size:0.68rem; color:rgba(255,255,255,0.3); position:relative; z-index:1; }
+
+    /* Right Panel */
+    .panel-right {
+      background: var(--white);
+      padding: 52px 44px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+
+    .back-link {
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:0.78rem; font-weight:600; color:var(--ink-muted);
+      text-decoration:none; margin-bottom:28px;
+      transition: color 0.15s;
+    }
+    .back-link:hover { color:var(--violet); }
+
+    .progress-steps { display:flex; gap:6px; margin-bottom:28px; }
+    .step { height:4px; border-radius:2px; background:var(--border); flex:1; transition:background 0.3s; }
+    .step.done { background: var(--green); }
+    .step.active { background: var(--violet); }
+
+    .form-heading { font-family:'Nunito',sans-serif; font-size:1.55rem; font-weight:800; color:var(--ink); margin-bottom:5px; letter-spacing:-0.3px; }
+    .form-sub { font-size:0.83rem; color:var(--ink-muted); margin-bottom:28px; font-weight:500; }
+
+    .error-msg {
+      background: var(--red-light); border: 1px solid #fca5a5;
+      color: var(--red); border-radius: var(--radius-sm);
+      padding: 10px 14px; font-size:0.82rem; font-weight:600;
+      margin-bottom:16px; display:flex; align-items:center; gap:8px;
+    }
+
+    .field { margin-bottom:16px; }
+    .field label { display:block; font-size:0.72rem; font-weight:700; color:var(--ink-soft); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; }
+    .input-wrap { position:relative; }
+    .input-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:0.88rem; pointer-events:none; }
+    .field input {
+      width:100%; padding:11px 13px 11px 38px;
+      border:1.5px solid var(--border); border-radius:var(--radius-sm);
+      font-family:'Nunito Sans',sans-serif; font-size:0.87rem; color:var(--ink);
+      background:var(--bg); outline:none; transition:all 0.18s;
+    }
+    .field input:focus { border-color:var(--violet); background:white; box-shadow:0 0 0 3px var(--violet-glow); }
+    .field input:valid:not(:placeholder-shown) { border-color:var(--green); }
+    .field input::placeholder { color:var(--ink-muted); }
+
+    .btn-register-submit {
+      width:100%; padding:12px;
+      background:linear-gradient(135deg, var(--violet), #9b7aff);
+      color:white; border:none; border-radius:var(--radius-sm);
+      font-family:'Nunito',sans-serif; font-size:0.9rem; font-weight:800;
+      cursor:pointer; transition:all 0.2s;
+      box-shadow:0 4px 14px var(--violet-glow);
+      margin-top:6px;
+    }
+    .btn-register-submit:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--violet-glow); }
+
+    .divider { text-align:center; font-size:0.78rem; color:var(--ink-muted); margin-top:16px; font-weight:500; }
+    .divider a { color:var(--violet); font-weight:700; text-decoration:none; }
+    .divider a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+  <div class="register-wrap">
+
+    <!-- Left -->
+    <div class="panel-left">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <span class="brand-name">UserFlow</span>
+      </div>
+
+      <div class="panel-copy">
+        <div class="panel-heading">Register a New User</div>
+        <div class="panel-text">Add users quickly and securely. All records are validated, sanitized, and CSRF-protected before storage.</div>
+        <div class="features">
+          <div class="feature"><div class="feature-dot">✓</div> Input validation (server-side)</div>
+          <div class="feature"><div class="feature-dot">✓</div> CSRF token on every form</div>
+          <div class="feature"><div class="feature-dot">✓</div> XSS sanitization via bleach</div>
+          <div class="feature"><div class="feature-dot">✓</div> Instant dashboard update</div>
+        </div>
+      </div>
+
+      <div class="panel-footer">CY256L · Secure Software Design · Air University</div>
+    </div>
+
+    <!-- Right -->
+    <div class="panel-right">
+      <a href="/" class="back-link">← Back to Dashboard</a>
+
+      <div class="progress-steps">
+        <div class="step active" id="s1"></div>
+        <div class="step" id="s2"></div>
+        <div class="step" id="s3"></div>
+      </div>
+
+      <div class="form-heading">Create Account</div>
+      <div class="form-sub">Fill in the fields below to register a new user.</div>
+
+      {% if error %}
+      <div class="error-msg">⚠ {{ error }}</div>
+      {% endif %}
+
+      <form action="/register" method="POST" id="regForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="field">
+          <label>First Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" name="fname" id="fname" placeholder="First name" required maxlength="100" oninput="updateProgress()">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Last Name</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" name="lname" id="lname" placeholder="Last name" required maxlength="100" oninput="updateProgress()">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉</span>
+            <input type="email" name="email" id="email" placeholder="you@example.com" required maxlength="200" oninput="updateProgress()">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-register-submit">Register User →</button>
+        <div class="divider">Already have records? <a href="/">View Dashboard</a></div>
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    function updateProgress() {
+      const f = document.getElementById('fname').value.trim();
+      const l = document.getElementById('lname').value.trim();
+      const e = document.getElementById('email').value.trim();
+      const s1 = document.getElementById('s1');
+      const s2 = document.getElementById('s2');
+      const s3 = document.getElementById('s3');
+      s1.className = 'step ' + (f ? 'done' : 'active');
+      s2.className = 'step ' + (l ? 'done' : (f ? 'active' : ''));
+      s3.className = 'step ' + (e ? 'done' : (l ? 'active' : ''));
+    }
+  </script>
+
+</body>
+</html>
